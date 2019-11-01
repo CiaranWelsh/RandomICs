@@ -10,14 +10,17 @@ creator.create("FitnessMin", base.Fitness, weights=(-1,))
 # print(FitnessMin)
 
 data = TimeCourse(
-    model_string, n=50,
-    from_pickle=False, pickle_file=SIMULATION_DATA_PICKLE).simulate_random_ics()
+    model_string, n=30,
+    from_pickle=False, pickle_file=SIMULATION_DATA_PICKLE,
+    subtract_ic_normalisation=True
+).simulate_random_ics()
 
 from sklearn.cluster import DBSCAN
 c = Cluster(
-    data, from_pickle=False, algorithm=DBSCAN, eps=0.3,
-    n_jobs=5
+    data, from_pickle=False, n_clusters=4,
+
 )
+
 a = Agent(features=[])#list(c.data.columns[0:5:1000]))
 
 current_best = None
@@ -26,7 +29,7 @@ i = 0
 # for i in range(1000):
 while not done:
     pick_or_put = np.random.uniform()
-    if pick_or_put > 0.3:
+    if pick_or_put > 0.1:
         print('picking ... ')
         action = a.get_actions()[0]
     else:
@@ -54,7 +57,7 @@ while not done:
     print('number of observations left: {}'.format(len(c.possibilities)))
     print('score for run {}: {}\n'.format(i, score))
 
-    if score > 0.70:# and all(c.features != -1):
+    if score > 0.95:# and all(c.features != -1):
         done = True
 
     """

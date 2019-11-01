@@ -26,7 +26,10 @@ class Cluster:
         self.pickle_file = pickle_file
         self.data = data
 
+        print('original size', self.data.shape)
+
         self.data = self.extract_features()
+        print('extacted', self.data.shape)
         self.original_feature_names = list(self.data.columns)
         # number the columns for ease
         self.data.columns = range(self.data.shape[1])
