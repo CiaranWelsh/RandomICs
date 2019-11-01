@@ -15,11 +15,15 @@ class TimCourseTests(unittest.TestCase):
         self.assertEqual(expected, data.shape[0])
 
     def test_plot(self):
-        fname = os.path.join(PICKLES_DIRECTORY, 'random_ts.png')
+        fname1 = os.path.join(PICKLES_DIRECTORY, 'random_ts_no_norm.png')
+        fname2 = os.path.join(PICKLES_DIRECTORY, 'random_ts_norm.png')
         tc = TimeCourse(model_string, n=10, lower_bound=0.1, upper_bound=10,
                         end_time=100, num_simulation_points=100,
                         )
-        TimeCourse.plot1(tc.simulate_random_ics(), filename=fname)
+        data = tc.simulate_random_ics()
+        norm_data = tc.normalise(data)
+        TimeCourse.plot1(data, filename=fname1)
+        TimeCourse.plot1(norm_data, filename=fname2)
 
 
 class ClusterTests(unittest.TestCase):

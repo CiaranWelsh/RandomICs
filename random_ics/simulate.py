@@ -13,7 +13,9 @@ class TimeCourse:
 
     def __init__(self, ant_str, n=10, lower_bound=0.1, upper_bound=10,
                  end_time=100, num_simulation_points=101, from_pickle=False,
-                 pickle_file=SIMULATION_DATA_PICKLE):
+                 pickle_file=SIMULATION_DATA_PICKLE,
+                 subtract_ic_normalisation=False):
+        self.subtract_ic_normalisation = subtract_ic_normalisation
         self.from_pickle = from_pickle
         self.pickle_file = pickle_file
         self.end_time = end_time
@@ -52,14 +54,19 @@ class TimeCourse:
             simulations[i] = df.set_index('time')
 
         df = pd.concat(simulations)
+
+        df.to_pickle(self.pickle_file)
+        return df
+
+    def normalise(self, df):
         dct = {}
         for label, df2 in df.groupby(level=0):
             dct[label] = df2.subtract(df2.iloc[0])
-
         df = pd.concat(dct)
         df.index = df.index.droplevel(0)
         df.to_pickle(self.pickle_file)
         return df
+
 
     @staticmethod
     def plot1(df, hspace=0.5, wspace=0.3, ncols=5, filename=None, **kwargs):
