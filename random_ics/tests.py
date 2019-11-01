@@ -48,14 +48,14 @@ class ClusterTests(unittest.TestCase):
     def test_agent_action1(self):
         c = Cluster(self.data, from_pickle=True)
         a = Agent(features=list(c.data.columns[0:5:1000]))
-        expected = len(a) + 1 #should gain 1 feature
+        expected = len(a) + 1  # should gain 1 feature
         c.possibilities = a.pick_a_feature(c.possibilities)
         self.assertEqual(expected, len(a.features))
 
     def test_agent_action2(self):
         c = Cluster(self.data, from_pickle=True)
         a = Agent(features=list(c.data.columns[0:5:1000]))
-        expected = len(c.possibilities) - 1 # should loose a feature
+        expected = len(c.possibilities) - 1  # should loose a feature
         a.pick_a_feature(c.possibilities)
         self.assertEqual(expected, len(c.possibilities))
 
@@ -81,25 +81,29 @@ class ClusterTests(unittest.TestCase):
 
     def test_result3(self):
         c = Cluster(self.data, n_clusters=4, n_init=10, from_pickle=True)
-        f = [5735, 6619, 7204, 7224, 6195, 6207, 6235, 6251, 6615, 6239, 6231, 7208, 6271, 6263, 6627, 7228, 6255, 7236, 6259, 6243, 7248, 6631, 6247]
+        f = [954, 7205, 273, 7201, 7304, 792, 868, 7237, 369, 7209, 373, 7229, 7245, 7233, 824, 836, 872, 7217, 888, 7213, 860, 7225, 864, 7193, 385, 7221, 377]
         a = Agent(features=f)
         score = c.cluster(a)
         print(score, c.get_feature_names(f))
         labels = c.algorithm.labels_
         fname = os.path.join(PICKLES_DIRECTORY, 'out.png')
         TimeCourse.plot2(self.data, labels, filename=fname)
-
 
     def test_result5(self):
-        c = Cluster(self.data, n_clusters=4, n_init=10, from_pickle=True)
-        f = [7115, 8568, 352, 5766, 5786, 821, 881, 869, 889, 380, 384, 8342, 873, 5794, 8564, 5774, 376, 877, 396, 5778, 8584, 388, 5770, 5782, 8576]
+        tc = TimeCourse(
+            model_string, n=10, subtract_ic_normalisation=True,
+            from_pickle=True, pickle_file=SIMULATION_DATA_PICKLE)
+        data = tc.simulate_random_ics()
+
+        c = Cluster(data, n_clusters=4, n_init=10, from_pickle=True)
+        f = [7115, 8568, 352, 5766, 5786, 821, 881, 869, 889, 380, 384, 8342, 873, 5794, 8564, 5774, 376, 877, 396,
+             5778, 8584, 388, 5770, 5782, 8576]
         a = Agent(features=f)
         score = c.cluster(a)
         print(score, c.get_feature_names(f))
         labels = c.algorithm.labels_
         fname = os.path.join(PICKLES_DIRECTORY, 'out.png')
         TimeCourse.plot2(self.data, labels, filename=fname)
-
 
     def test_result4(self):
         c = Cluster(self.data, n_clusters=4, n_init=10, from_pickle=False)
@@ -109,8 +113,6 @@ class ClusterTests(unittest.TestCase):
         # labels = c.algorithm.labels_
         # fname = os.path.join(PICKLES_DIRECTORY, 'out.png')
         # TimeCourse.plot2(self.data, labels, filename=fname)
-
-
 
 
 if __name__ == '__main__':

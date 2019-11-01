@@ -56,6 +56,9 @@ class TimeCourse:
         df = pd.concat(simulations)
 
         df.to_pickle(self.pickle_file)
+
+        if self.subtract_ic_normalisation:
+            df = self.normalise(df)
         return df
 
     def normalise(self, df):
