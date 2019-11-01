@@ -18,7 +18,7 @@ class TimCourseTests(unittest.TestCase):
         fname1 = os.path.join(PICKLES_DIRECTORY, 'random_ts_no_norm.png')
         fname2 = os.path.join(PICKLES_DIRECTORY, 'random_ts_norm.png')
         tc = TimeCourse(model_string, n=10, lower_bound=0.1, upper_bound=10,
-                        end_time=100, num_simulation_points=100,
+                        end_time=50, num_simulation_points=50,
                         )
         data = tc.simulate_random_ics()
         norm_data = tc.normalise(data)
